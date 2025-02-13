@@ -33,7 +33,7 @@ export default function RegisterPage() {
                         />
                         <input
                             type="email"
-                            placeholder="Correo electrónico"
+                            placeholder="Correo institucional"
                             className="bg-gray-100 border-gray-400 w-full border-b py-4 pl-3"
                             {...register('email', {
                                 required: true,
@@ -50,9 +50,13 @@ export default function RegisterPage() {
                             type="tel"
                             placeholder="Número de teléfono"
                             className="bg-gray-100 border-gray-400 w-full border-b py-4 pl-3"
-                            {...register('phoneNumber', {required: true, validate: (value) => /^[0-9]{10}$/.test(value) || 'El número de teléfono debe tener 10 dígitos'})}
+                            {...register('phoneNumber', {
+                                required: true,
+                                validate: (value) => /^[0-9]{10}$/.test(value) || 'El número de teléfono debe tener 10 dígitos'
+                            })}
                         />
-                        {errors.phoneNumber?.message && (<InputErrorMessage message={String(errors.phoneNumber.message)}/>)}
+                        {errors.phoneNumber?.message && (
+                            <InputErrorMessage message={String(errors.phoneNumber.message)}/>)}
                         <input
                             type="password"
                             placeholder="Contraseña"
