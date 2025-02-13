@@ -1,11 +1,11 @@
 export default function InputErrorMessage({ message }: { message: string }) {
   return (
-    <div className="flex items-center gap-1 text-red-600 text-sm mt-[-10px] w-auto">
+    <div className="flex items-center gap-1 text-red-600 text-xs mt-[-10px] w-auto">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         fill="currentColor"
-        className="size-5"
+        className="size-4"
       >
         <path
           fillRule="evenodd"
