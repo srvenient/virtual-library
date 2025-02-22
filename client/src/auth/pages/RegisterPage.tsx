@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useForm, Controller} from 'react-hook-form';
-import {registerRequest} from '../api/auth.ts';
+import {registerRequest} from '../services/auth.ts';
 import {Link} from 'react-router-dom';
 import InputErrorMessage from '../components/error/InputErrorMessage.tsx';
 import Navbar from '../components/nav/Navbar.tsx';
@@ -69,10 +69,10 @@ export default function RegisterPage() {
                                 />
                             </svg>
                             Te has registrado exitosamente. <br/>
-                            <a>
+                            <span>
                                 <Link to='/' className="text-sky-600 underline">Inicia sesión</Link> para
                                 continuar.
-                            </a>
+                            </span>
                         </p>}
                     <p className="text-gray-600 text-[18px] text-center mb-4">
                         <span className="text-black text-[32px] mb-4">Regístrate</span><br/>

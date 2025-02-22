@@ -1,5 +1,5 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from "react";
-import {loginRequest, verifyTokenRequest} from "../api/auth.ts";
+import {loginRequest, verifyTokenRequest} from "../services/auth.ts";
 import Cookies from 'js-cookie';
 
 // @ts-ignore
@@ -16,12 +16,14 @@ export const useAuth: any = () => {
 export default function AuthProvider({children}: { children: ReactNode }) {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const login = async (data: Record<string, any>) => {
         try {
-            const response = await loginRequest(data);
+            await loginRequest(data);
+
             setIsAuthenticated(true);
-            setUser(response.data);
+            setLoading(false);
         } catch (error: any) {
             throw error;
         }
@@ -31,18 +33,26 @@ export default function AuthProvider({children}: { children: ReactNode }) {
         async function checkLogin() {
             const cookies = Cookies.get();
 
-            if (cookies.token) {
-                try {
-                    const response = await verifyTokenRequest(cookies.token);
-                    if (!response.data) {
-                        setIsAuthenticated(false);
-                    }
-                    setIsAuthenticated(true);
-                    setUser(response.data);
-                } catch (error: any) {
+            if (!cookies.token) {
+                setIsAuthenticated(false);
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const data = await verifyTokenRequest();
+                if (!data) {
                     setIsAuthenticated(false);
-                    setUser(null);
+                    setLoading(false);
+                    return;
                 }
+                setIsAuthenticated(true);
+                setUser(data);
+                setLoading(false);
+            } catch (error: any) {
+                setIsAuthenticated(false);
+                setUser(null);
+                setLoading(false);
             }
         }
 
@@ -51,7 +61,7 @@ export default function AuthProvider({children}: { children: ReactNode }) {
 
 
     return (
-        <AuthContext.Provider value={{login, user, isAuthenticated}}>
+        <AuthContext.Provider value={{login, user, isAuthenticated, loading}}>
             {children}
         </AuthContext.Provider>
     );

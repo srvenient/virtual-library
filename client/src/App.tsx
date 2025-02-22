@@ -5,7 +5,6 @@ import TermsAndConditionsPage from "./common/pages/TermsAndConditionsPage.tsx";
 import HomePage from "./core/pages/HomePage.tsx";
 import AuthProvider from "./auth/context/AuthContext.tsx";
 import ProtectedRoute from "./auth/components/ProtectedRoute.tsx";
-import BooksPage from "./book/pages/BooksPage.tsx";
 
 export default function App() {
     return (
@@ -18,7 +17,6 @@ export default function App() {
 
                     <Route element={<ProtectedRoute/>}>
                         <Route path="/home" element={<HomePage/>}/>
-                        <Route path="/books" element={<BooksPage/>}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

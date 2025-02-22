@@ -1,47 +1,96 @@
 from datetime import datetime, timedelta, timezone
+from typing import Optional, Dict, Any
 
 import jwt
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
+# OAuth2 scheme for token extraction
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
 SECRET_KEY = "cbb6280f2ae62fa5c35b9bdfe9f9f074814f420aefd3d7c83841f0b4ecc58f60"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-
 
 class Token(BaseModel):
+    """
+    Schema for the JWT token response.
+    """
     access_token: str
     token_type: str
 
 
 class TokenData(BaseModel):
-    username: str | None = None
+    """
+    Schema for data stored in the token.
+    """
+    username: Optional[str] = None
 
 
-pwd_context = CryptContext(schemes=["bcrypt"])
+# Configure the password context with bcrypt; mark older algorithms as deprecated
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def verify_password(plain_password, hashed_password):
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    Verify that the provided plain password matches the hashed password.
+
+    Args:
+        plain_password (str): The plain text password.
+        hashed_password (str): The hashed password to compare against.
+
+    Returns:
+        bool: True if the password matches, else False.
+    """
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def get_password_hash(password):
+def get_password_hash(password: str) -> str:
+    """
+    Hash the provided password using bcrypt.
+
+    Args:
+        password (str): The password to hash.
+
+    Returns:
+        str: The hashed password.
+    """
     return pwd_context.hash(password)
 
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+    """
+    Create a JWT access token.
+
+    Args:
+        data (Dict[str, Any]): The payload data to encode in the token.
+        expires_delta (Optional[timedelta]): Optional timedelta for token expiration.
+            Defaults to 15 minutes if not provided.
+
+    Returns:
+        str: The encoded JWT token.
+    """
     to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
+    now = datetime.now(timezone.utc)
+    expire = now + (expires_delta if expires_delta else timedelta(minutes=15))
+    to_encode.update({"exp": expire, "iat": now})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 
-def decode_access_token(token: str):
+def decode_access_token(token: str) -> Dict[str, Any]:
+    """
+    Decode a JWT access token.
+
+    Args:
+        token (str): The JWT token to decode.
+
+    Returns:
+        Dict[str, Any]: The decoded token payload.
+
+    Raises:
+        jwt.PyJWTError: If the token is invalid or expired.
+    """
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
