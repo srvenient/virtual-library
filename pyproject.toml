@@ -2,9 +2,10 @@
 name = "virutal-library"
 version = "0.1.0"
 description = "A virtual library"
+readme = "README.md"
+requires-python = ">=3.9"
 
 [tool.poetry.dependencies]
-python = "^3.13"
 fastapi = "~0.115.8"
 pydantic = "~2.10.6"
 PyJWT = "~2.10.1"
