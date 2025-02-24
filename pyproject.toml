@@ -19,6 +19,7 @@ sqlmodel = "~0.0.22"
 SQLAlchemy = "~2.0.38"
 starlette = "~0.45.3"
 uvicorn = "^0.34.0"
+psycopg2 = "^2.9.10"
 
 [tool.poetry]
 package-mode = false
