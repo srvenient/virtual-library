@@ -2,7 +2,6 @@ from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
-from logging_config import logger
 from libs.jwt import decode_access_token
 
 
@@ -31,9 +30,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
         # Retrieve the token from cookies
         token = request.cookies.get("token")
-        logger.error(f"Token: {token}")
         if not token:
-            logger.error("No access token provided")
             return JSONResponse(
                 status_code=401,
                 content={"detail": "No access token provided"},
@@ -41,7 +38,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
         # Remove the "Bearer " prefix if present
         if token.startswith("Bearer "):
-            logger.error("Removing 'Bearer' prefix from token")
             token = token[len("Bearer "):]
 
         try:
@@ -49,7 +45,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
             # Set the current user's identifier on the request state
             request.state.user = payload.get("sub")
         except Exception as e:
-            logger.error(f"Invalid token: {str(e)}")
             return JSONResponse(
                 status_code=401,
                 content={"detail": f"Invalid token: {str(e)}"},
@@ -57,5 +52,4 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
 
         response = await call_next(request)
-        logger.error(f"Response: {response.status_code}")
         return response
