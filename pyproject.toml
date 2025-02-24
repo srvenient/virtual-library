@@ -1,9 +1,13 @@
 [project]
-name = "virutal-library"
+name = "virtual-library"
 version = "0.1.0"
 description = "A virtual library"
 readme = "README.md"
 requires-python = ">=3.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
 fastapi = "~0.115.8"
@@ -14,7 +18,7 @@ bcrypt = "4.0.1"
 sqlmodel = "~0.0.22"
 SQLAlchemy = "~2.0.38"
 starlette = "~0.45.3"
+uvicorn = "^0.34.0"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry]
+package-mode = false
