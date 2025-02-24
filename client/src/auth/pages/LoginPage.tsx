@@ -1,9 +1,8 @@
-import {Link, NavigateFunction, useNavigate} from "react-router-dom";
-import Navbar from "../components/nav/Navbar.tsx";
-import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
+import NavbarPublic from "../../shared/components/header/NavbarPublic.tsx";
 import {useForm} from "react-hook-form";
-import InputErrorMessage from "../components/error/InputErrorMessage.tsx";
-import {useAuth} from "../context/AuthContext.tsx";
+import {useLogin} from "../hooks/useLogin.ts";
+import ErrorMessage from "../../shared/components/ErrorMessage.tsx";
 
 export default function LoginPage() {
     const {register, handleSubmit, formState: {errors, isValid}} = useForm({
@@ -16,31 +15,14 @@ export default function LoginPage() {
             accepted_terms: false,
         }
     });
-    const {login, isAuthenticated} = useAuth();
-    const navigate: NavigateFunction = useNavigate();
+    const {handleLogin, error} = useLogin();
 
-    const [error, setError] = useState<boolean | null>(null);
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigate('/home');
-        }
-    }, [isAuthenticated]);
-
-    const onSubmit = handleSubmit(async (data: Record<string, any>) => {
-        setError(null);
-
-        try {
-            await login(data);
-        } catch (error: any) {
-            setError(true);
-        }
-    });
+    const onSubmit = handleSubmit(handleLogin);
 
     return (
         <div>
-            <Navbar currentSection="Acceso a Biblioteca Virtual" buttonBack={false}/>
-            <div className="bg-white flex justify-center items-center mt-16">
+            <NavbarPublic currentSection="Acceso a Biblioteca Virtual" buttonBack={false}/>
+            <div className="bg-white flex justify-center items-center mt-16 font-bbva">
                 <div className="flex max-w-4xl bg-white gap-x-8">
                     <div className="flex flex-col w-96 justify-center">
                         {error &&
@@ -73,13 +55,13 @@ export default function LoginPage() {
                             <input
                                 type="email"
                                 placeholder="Correo institucional"
-                                className="bg-gray-100 border-gray-400 w-full border-b py-4 pl-3"
+                                className="bg-gray-100 border-gray-800 w-full border-b py-4 pl-3"
                                 {...register('email', {
                                     required: true,
                                     validate: (value) => /^[a-zA-Z0-9._%+-]+@unimonserrate\.edu\.co$/.test(value) || 'El correo debe ser institucional'
                                 })}
                             />
-                            {errors.email?.message && (<InputErrorMessage message={String(errors.email.message)}/>)}
+                            {errors.email?.message && (<ErrorMessage text={String(errors.email.message)}/>)}
 
                             <input
                                 type="password"
@@ -100,12 +82,11 @@ export default function LoginPage() {
                                 }
 
                             />
-                            {errors.password?.message && (
-                                <InputErrorMessage message={String(errors.password.message)}/>)}
+                            {errors.password?.message && (<ErrorMessage text={String(errors.password.message)}/>)}
                             <button
                                 type="submit"
                                 disabled={!isValid}
-                                className={`h-[55px] min-w-[170px] font-semibold ${!isValid ? 'text-black bg-gray-400 opacity-30' : 'bg-[#1973b8] hover:bg-sky-700 text-white'}`}
+                                className={`font-bbva font-medium text-[15px] h-[55px] min-w-[170px] ${!isValid ? 'text-black bg-gray-400 opacity-30' : 'bg-[#1973b8] hover:bg-sky-700 text-white'}`}
                             >
                                 Entrar
                             </button>
@@ -121,13 +102,14 @@ export default function LoginPage() {
                                 </p>
                                 <Link to="/register">
                                     <button
-                                        className="bg-[#1973b8] hover:bg-sky-700 text-[17px] h-[55px] min-w-[170px] font-semibold">
+                                        className="font-medium text-[15px] bg-[#1973b8] hover:bg-sky-700 h-[55px] min-w-[170px]">
                                         Regístrate
                                     </button>
                                 </Link>
                             </div>
-                            <p className="text-[13.5px] font-bold">
-                                Consulta libros y recursos digitales de manera ágil y segura.
+                            <p className="text-[12.5px] font-bold">
+                                Consulta libros y recursos digitales<br/>
+                                de manera ágil y segura.
                             </p>
                         </div>
                     </div>

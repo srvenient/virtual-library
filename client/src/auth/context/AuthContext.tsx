@@ -1,9 +1,17 @@
-import {createContext, ReactNode, useContext, useEffect, useState} from "react";
+import {createContext, ReactNode, useCallback, useContext, useEffect, useState} from "react";
 import {loginRequest, verifyTokenRequest} from "../services/auth.ts";
 import Cookies from 'js-cookie';
 
-// @ts-ignore
-export const AuthContext = createContext();
+interface AuthContextType {
+    user: any | null;
+    isAuthenticated: boolean;
+    login: (data: Record<string, any>) => Promise<void>;
+    logout: () => void;
+    loading: boolean;
+}
+
+
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth: any = () => {
     const context = useContext(AuthContext);
@@ -14,9 +22,38 @@ export const useAuth: any = () => {
 }
 
 export default function AuthProvider({children}: { children: ReactNode }) {
-    const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
+
+    const setAuthState = (isAuthenticated: boolean, user: any = null) => {
+        setIsAuthenticated(isAuthenticated);
+        setUser(user);
+    };
+
+    const onAuthStateChanged = useCallback(async () => {
+        setLoading(true);
+
+        if (!Cookies.get('token')) {
+            setAuthState(false);
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await verifyTokenRequest();
+            if (!response.data) {
+                return setAuthState(false);
+            } else {
+                setAuthState(true, response.data);
+            }
+        } catch (error: any) {
+            console.error("Error verifying token:", error);
+            setAuthState(false);
+        } finally {
+            setLoading(false);
+        }
+    }, [verifyTokenRequest]);
 
     const login = async (data: Record<string, any>) => {
         try {
@@ -24,44 +61,27 @@ export default function AuthProvider({children}: { children: ReactNode }) {
 
             setIsAuthenticated(true);
             setLoading(false);
+
+            await onAuthStateChanged();
         } catch (error: any) {
+            setIsAuthenticated(false);
             throw error;
         }
     };
 
+    const logout = () => {
+        Cookies.remove('token');
+        setAuthState(false);
+    }
+
     useEffect(() => {
-        async function checkLogin() {
-            const cookies = Cookies.get();
-
-            if (!cookies.token) {
-                setIsAuthenticated(false);
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const data = await verifyTokenRequest();
-                if (!data) {
-                    setIsAuthenticated(false);
-                    setLoading(false);
-                    return;
-                }
-                setIsAuthenticated(true);
-                setUser(data);
-                setLoading(false);
-            } catch (error: any) {
-                setIsAuthenticated(false);
-                setUser(null);
-                setLoading(false);
-            }
-        }
-
-        checkLogin();
-    }, []);
-
+        (async () => {
+            await onAuthStateChanged();
+        })();
+    }, [onAuthStateChanged]);
 
     return (
-        <AuthContext.Provider value={{login, user, isAuthenticated, loading}}>
+        <AuthContext.Provider value={{login, logout, user, isAuthenticated, loading}}>
             {children}
         </AuthContext.Provider>
     );

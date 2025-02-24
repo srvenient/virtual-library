@@ -1,8 +1,11 @@
 // src/common/TermsAndConditions.jsx
 
+import NavbarPublic from "../../shared/components/header/NavbarPublic.tsx";
+
 export default function TermsAndConditionsPage({}: { pathName: string }) {
     return (
         <div>
+            <NavbarPublic currentSection="Términos y condiciones" buttonBack={true} pathName="register"/>
             <div className="container mx-auto mt-24 px-4 text-center">
                 <h1 className="mt-4 text-2xl font-bold">Términos y Condiciones</h1>
                 <p className="mt-2 font-semibold">Condiciones de Uso</p>

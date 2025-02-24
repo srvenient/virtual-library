@@ -2,8 +2,8 @@ import {useState} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {registerRequest} from '../services/auth.ts';
 import {Link} from 'react-router-dom';
-import InputErrorMessage from '../components/error/InputErrorMessage.tsx';
-import Navbar from '../components/nav/Navbar.tsx';
+import NavbarPublic from '../../shared/components/header/NavbarPublic.tsx';
+import ErrorMessage from "../../shared/components/ErrorMessage.tsx";
 
 export default function RegisterPage() {
     const {register, handleSubmit, formState: {errors, isValid}, control, reset} = useForm({
@@ -35,15 +35,15 @@ export default function RegisterPage() {
 
     return (
         <div>
-            <Navbar currentSection="Registro en Biblioteca Virtual" buttonBack={true}/>
-            <div className="bg-white flex justify-center items-center mt-16">
+            <NavbarPublic currentSection="Registro en Biblioteca Virtual" buttonBack={true}/>
+            <div className="bg-white flex justify-center items-center mt-16 font-bbva">
                 <div className="flex flex-col">
                     {error && <label className="flex flex-col items-center text-red-600 text-center text-xl mb-4">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                             fill="currentColor"
-                            className="size-6"
+                            className="size-6 mb-2"
                         >
                             <path
                                 fillRule="evenodd"
@@ -60,7 +60,7 @@ export default function RegisterPage() {
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
-                                className="size-6 items-center"
+                                className="size-6 items-center mb-2"
                             >
                                 <path
                                     fillRule="evenodd"
@@ -74,45 +74,49 @@ export default function RegisterPage() {
                                 continuar.
                             </span>
                         </p>}
-                    <p className="text-gray-600 text-[18px] text-center mb-4">
-                        <span className="text-black text-[32px] mb-4">Regístrate</span><br/>
-                        Ingresa los siguientes datos para confirmar tu<br/>
-                        identidad.
-                    </p>
+                    <div className="text-center mb-5">
+                        <h1 className="text-black text-[34px] mb-4">
+                            Regístrate en BBVA net
+
+                        </h1>
+                        <p className="text-gray-600 text-[16px]">
+                            Ingresa los siguientes datos para confirmar tu<br/>
+                            identidad.
+                        </p>
+                    </div>
                     <form className="flex flex-col items-center gap-y-4" onSubmit={onSubmit}>
                         <input
                             type="text"
                             placeholder="Nombre completo"
-                            className="bg-gray-100 border-gray-800 w-full border-b py-4 pl-3"
+                            className="text-[15.5px] bg-gray-100 border-gray-800 w-full border-b py-4 pl-3"
                             {...register('full_name', {required: true})}
                         />
                         <input
                             type="email"
                             placeholder="Correo institucional"
-                            className="bg-gray-100 border-gray-800 w-full border-b py-4 pl-3"
+                            className="text-[15.5px] bg-gray-100 border-gray-800 w-full border-b py-4 pl-3"
                             {...register('email', {
                                 required: true,
                                 validate: (value) => /^[a-zA-Z0-9._%+-]+@unimonserrate\.edu\.co$/.test(value) || 'El correo debe ser institucional'
                             })}
                         />
-                        {errors.email?.message && (<InputErrorMessage message={String(errors.email.message)}/>)}
+                        {errors.email?.message && (<ErrorMessage text={String(errors.email.message)}/>)}
 
                         <input
                             type="tel"
                             placeholder="Número de teléfono"
-                            className="bg-gray-100 border-gray-800 w-full border-b py-4 pl-3"
+                            className="text-[15.5px] bg-gray-100 border-gray-800 w-full border-b py-4 pl-3"
                             {...register('phone_number', {
                                 required: true,
                                 validate: (value) => /^[0-9]{10}$/.test(value) || 'El número de teléfono debe tener 10 dígitos'
                             })}
                         />
-                        {errors.phone_number?.message && (
-                            <InputErrorMessage message={String(errors.phone_number.message)}/>)}
+                        {errors.phone_number?.message && (<ErrorMessage text={String(errors.phone_number.message)}/>)}
 
                         <input
                             type="password"
                             placeholder="Contraseña"
-                            className="bg-gray-100 border-gray-800 w-full border-b py-4 pl-3"
+                            className="text-[15.5px] bg-gray-100 border-gray-800 w-full border-b py-4 pl-3"
                             {...register('password', {
                                 required: true,
                                 minLength: {
@@ -129,7 +133,7 @@ export default function RegisterPage() {
                                 },
                             })}
                         />
-                        {errors.password?.message && (<InputErrorMessage message={String(errors.password.message)}/>)}
+                        {errors.password?.message && (<ErrorMessage text={String(errors.password.message)}/>)}
 
                         <Controller
                             name="accepted_terms"
@@ -144,7 +148,7 @@ export default function RegisterPage() {
                                         onChange={(e) => field.onChange(e.target.checked)}
                                         className="mr-2"
                                     />
-                                    <label className="text-gray-700">
+                                    <label className="text-gray-700 text-[15px]">
                                         Acepto los{' '}
                                         <Link to="/terms-and-conditions" className="underline text-sky-600">
                                             términos y condiciones
@@ -156,7 +160,7 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={!isValid}
-                            className={`h-[50px] min-w-[160px] font-semibold ${!isValid ? 'text-black bg-gray-400 opacity-30' : 'bg-[#1973b8] hover:bg-sky-700 text-white'}`}
+                            className={`h-[50px] min-w-[160px] font-medium text-[15px] ${!isValid ? 'text-black bg-gray-400 opacity-30' : 'bg-[#1973b8] hover:bg-sky-700 text-white'}`}
                         >
                             Registrar
                         </button>

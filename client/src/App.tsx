@@ -1,16 +1,19 @@
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {Routes, Route, useLocation} from 'react-router-dom';
 import LoginPage from "./auth/pages/LoginPage.tsx";
 import RegisterPage from "./auth/pages/RegisterPage.tsx";
-import TermsAndConditionsPage from "./common/pages/TermsAndConditionsPage.tsx";
-import HomePage from "./core/pages/HomePage.tsx";
+import TermsAndConditionsPage from "./auth/pages/TermsAndConditionsPage.tsx";
 import AuthProvider from "./auth/context/AuthContext.tsx";
-import ProtectedRoute from "./auth/components/ProtectedRoute.tsx";
+import ProtectedRoute from "./ProtectedRoute.tsx";
+import HomePage from "./home/pages/HomePage.tsx";
 
 export default function App() {
+    const location = useLocation();
+    const isPublicRoute = ["/", "/register", "/terms-and-conditions"].includes(location.pathname);
+
     return (
         <AuthProvider>
-            <BrowserRouter>
-                <Routes>
+            <Routes>
+                <Route element={isPublicRoute ? null : <ProtectedRoute/>}>
                     <Route path="/" element={<LoginPage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
                     <Route path="/terms-and-conditions" element={<TermsAndConditionsPage pathName={''}/>}/>
@@ -18,8 +21,8 @@ export default function App() {
                     <Route element={<ProtectedRoute/>}>
                         <Route path="/home" element={<HomePage/>}/>
                     </Route>
-                </Routes>
-            </BrowserRouter>
+                </Route>
+            </Routes>
         </AuthProvider>
     );
 }

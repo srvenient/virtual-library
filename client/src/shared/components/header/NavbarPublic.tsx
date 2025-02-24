@@ -1,17 +1,21 @@
-// Desc: Navbar component for the auth module
-// Location: src/modules/auth/components/common/Navbar.tsx
-// File: Navbar.tsx
+// Desc: NavbarPrivate component for the auth module
+// Location: src/modules/auth/components/common/NavbarPrivate.tsx
+// File: NavbarPrivate.tsx
 // Module: auth
 // State: Pending
 // Type: Component
-// Description: Navbar component for the auth module
-// Component: Navbar
+// Description: NavbarPrivate component for the auth module
+// Component: NavbarPrivate
 import {Link} from "react-router-dom";
 
-function Navbar({currentSection, buttonBack, pathName}: {
-    currentSection: string,
-    buttonBack?: boolean,
-    pathName?: string
+export default function NavbarPublic({
+  currentSection,
+  buttonBack,
+  pathName,
+}: {
+  currentSection: string;
+  buttonBack?: boolean;
+  pathName?: string;
 }) {
     return (
         <div className="bg-[#072146] py-1 relative">
@@ -26,7 +30,7 @@ function Navbar({currentSection, buttonBack, pathName}: {
                     </Link>
                     <div className="flex items-center">
                         <a
-                            className="text-white px-3 py-2 rounded-md text-base font-medium"
+                            className="text-white font-bbva px-3 py-2 rounded-md text-base font-medium"
                         >
                             {currentSection}
                         </a>
@@ -56,5 +60,3 @@ function Navbar({currentSection, buttonBack, pathName}: {
         </div>
     );
 }
-
-export default Navbar;

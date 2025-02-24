@@ -1,4 +1,4 @@
-export default function InputErrorMessage({ message }: { message: string }) {
+export default function ErrorMessage({ text }: { text: string }) {
   return (
     <div className="flex items-center gap-1 text-red-600 text-xs mt-[-10px] w-auto">
       <svg
@@ -13,7 +13,7 @@ export default function InputErrorMessage({ message }: { message: string }) {
           clipRule="evenodd"
         />
       </svg>
-      <span className="text-black">{message}</span>
+      <span className="text-black">{text}</span>
     </div>
   );
 }
