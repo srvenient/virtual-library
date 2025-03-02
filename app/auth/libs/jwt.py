@@ -1,33 +1,15 @@
+import jwt
+
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any
 
-import jwt
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
-from pydantic import BaseModel
+
+from config.env_variables import SECRET_KEY, ALGORITHM
 
 # OAuth2 scheme for token extraction
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-
-SECRET_KEY = "cbb6280f2ae62fa5c35b9bdfe9f9f074814f420aefd3d7c83841f0b4ecc58f60"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-
-class Token(BaseModel):
-    """
-    Schema for the JWT token response.
-    """
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    """
-    Schema for data stored in the token.
-    """
-    username: Optional[str] = None
-
 
 # Configure the password context with bcrypt; mark older algorithms as deprecated
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
