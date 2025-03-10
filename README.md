@@ -29,13 +29,12 @@ poetry install
 ```bash
 cd client
 npm install
-cd ..
 ```
 
 ## ▶️ Iniciar la aplicación
 
 ### 1️⃣ Iniciar el backend
-Ejecuta el siguiente comando desde la raíz del proyecto:
+Ejecuta el siguiente comando desde el directorio app del proyecto:
 ```bash
 cd app
 poetry run uvicorn main:app --reload
