@@ -25,13 +25,11 @@ class StudentRepository(CrudRepository[Student, uuid.UUID], ABC):
     def get_all(self) -> list[Type[Student]]:
         return self.session.query(self.model).all()
 
-    def create(self, obj_in: dict) -> Student:
-        obj = self.model(**obj_in)
-        self.session.add(obj)
-        self.session.flush()
+    def create(self, model: T) -> Student:
+        self.session.add(model)
         self.session.commit()
-        self.session.refresh(obj)
-        return obj
+        self.session.refresh(model)
+        return model
 
     def update(self, obj: Student, obj_in: dict) -> Student:
         for field in obj_in:

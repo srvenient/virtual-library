@@ -19,7 +19,7 @@ class CrudRepository(ABC, Generic[T, ID]):
         pass
 
     @abstractmethod
-    def create(self, obj_in: dict) -> T:
+    def create(self, model: T) -> T:
         pass
 
     @abstractmethod

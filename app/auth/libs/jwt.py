@@ -6,7 +6,7 @@ from typing import Optional, Dict, Any
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 
-from config.env_variables import SECRET_KEY, ALGORITHM
+from app.config.env_variables import SECRET_KEY, ALGORITHM
 
 # OAuth2 scheme for token extraction
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")

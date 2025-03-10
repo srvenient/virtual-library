@@ -7,8 +7,8 @@ from starlette.middleware.cors import CORSMiddleware
 from app.auth.middlewares.validate_token import AuthMiddleware
 from app.auth.routes.auth_routers import router
 from app.docs.documentation import tags_metadata
-from config.database import create_db_and_tables
-from config.env_variables import ENV, HOST, APP_PORT, ALLOWED_ORIGINS
+from app.config.database import create_db_and_tables
+from app.config.env_variables import ENV, HOST, APP_PORT, ALLOWED_ORIGINS
 
 
 @asynccontextmanager

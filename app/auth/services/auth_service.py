@@ -8,7 +8,7 @@ from app.auth.schemas.auth_schemas import Token
 from app.student.dependencies.student_dependencies import get_student_repository
 from app.student.models.student_model import Student
 from app.student.repositories.sql_user_repository import StudentRepository
-from config.env_variables import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.config.env_variables import ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 def register_student(student_create: Student, student_repository: StudentRepository = Depends(get_student_repository)) -> Student:
@@ -21,17 +21,17 @@ def register_student(student_create: Student, student_repository: StudentReposit
 
     hashed_password = get_password_hash(student_create.password)
 
-    new_student_data = {
-        "full_name": student_create.full_name,
-        "email": student_create.email,
-        "phone_number": student_create.phone_number,
-        "accepted_terms": student_create.accepted_terms,
-        "disabled": student_create.disabled,
-        "password": hashed_password,
-    }
+    new_student = Student(
+        full_name=student_create.full_name,
+        email=student_create.email,
+        phone_number=student_create.phone_number,
+        accepted_terms=student_create.accepted_terms,
+        disabled=student_create.disabled,
+        password=hashed_password,
+    )
 
     try:
-        new_student = student_repository.create(new_student_data)
+        new_student = student_repository.create(new_student)
     except IntegrityError:
         student_repository.session.rollback()
         raise HTTPException(
