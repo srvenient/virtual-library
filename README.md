@@ -44,6 +44,6 @@ Esto iniciará el servidor de FastAPI en http://127.0.0.1:8000/.
 ### 2️⃣ Iniciar el frontend
 ```bash
 cd client
-npm run dev # Esto es por si estas en un entorno de desarrollo
+npm run dev
 ```
 Esto ejecutará la aplicación en modo desarrollo. Abre http://localhost:5174 en tu navegador.
