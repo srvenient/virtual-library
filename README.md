@@ -37,6 +37,7 @@ cd ..
 ### 1️⃣ Iniciar el backend
 Ejecuta el siguiente comando desde la raíz del proyecto:
 ```bash
+cd app
 poetry run uvicorn main:app --reload
 ```
 Esto iniciará el servidor de FastAPI en http://127.0.0.1:8000/.
