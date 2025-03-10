@@ -1,21 +1,21 @@
-import {useState} from "react";
-import {useAuth} from "../context/AuthContext.tsx";
-import {NavigateFunction, useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../../redux/store.ts";
+import {useNavigate} from "react-router-dom";
+import {login} from "../../redux/states/auth.slice.ts";
 
-export function useLogin() {
-    const {login} = useAuth();
-    const navigate: NavigateFunction = useNavigate();
-    const [error, setError] = useState<boolean | null>(null);
+export default function useLogin() {
+    const dispatch = useDispatch<AppDispatch>();
+
+    const navigate = useNavigate();
 
     const handleLogin = async (data: Record<string, any>) => {
-        setError(null);
-        try {
-            await login(data);
-            navigate('/home');
-        } catch (error: any) {
-            setError(true);
+        const result = await dispatch(login(data));
+        if (login.fulfilled.match(result)) {
+            navigate("/home")
+        } else {
+            navigate("/errors/invalid-credentials");
         }
     };
 
-    return {handleLogin, error};
+    return {handleLogin};
 }

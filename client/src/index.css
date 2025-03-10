@@ -1,24 +1,47 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #072146;
+    --color-primary-light: #1a3e6b;
+    --color-secondary: #003399;
+
+    --color-button-primary: #1973b8;
+
+    --color-theme-teal-deep: #028484;
+    --color-theme-deep-sky-blue: #1973b8;
+    --color-theme-ocean-blue: #497b9c;
+    --color-theme-soft-blue: #7ab0c7;
+    --color-theme-aqua-sky: #a3d4e0;
+    --color-theme-light-blue: #d6f0f3;
+    --color-theme-lightest-blue: #f0f9fa;
+
+    --font-family-special: "Coronita", Arial, Helvetica, sans-serif;
+    --font-family-error: "Verdana", sans-serif;
+}
 
 @font-face {
-    font-family: 'BentonSansBBVA';
-    src: url('../src/assets/fonts/BentonSansBBVA-Book-Lite.woff2') format('woff2');
+    font-family: "helvetica neue";
+    src: url("/fonts/coronita.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'BentonSansBBVA';
-    src: url('../src/assets/fonts/BentonSansBBVA-Medium-Lite.woff2') format('woff2');
-    font-weight: 500;
+    font-family: "BentonSans";
+    src: url("/fonts/BentonSansBBVA-Book-Lite.woff2") format("woff2");
+    font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
-@font-face {
-    font-family: 'BentonSansBBVA';
-    src: url('../src/assets/fonts/BentonSansBBVA-Bold-Lite.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
+@layer base {
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
+}
+
+body {
+    font-family: "BentonSans", sans-serif;
 }

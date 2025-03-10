@@ -1,28 +1,34 @@
-import {Routes, Route, useLocation} from 'react-router-dom';
-import LoginPage from "./auth/pages/LoginPage.tsx";
-import RegisterPage from "./auth/pages/RegisterPage.tsx";
-import TermsAndConditionsPage from "./auth/pages/TermsAndConditionsPage.tsx";
-import AuthProvider from "./auth/context/AuthContext.tsx";
-import ProtectedRoute from "./ProtectedRoute.tsx";
-import HomePage from "./home/pages/HomePage.tsx";
+import React from 'react';
+import './App.css'
+import {Suspense} from "react";
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import SuspenseFallback from "./shared/components/feedback/SuspenseFallback.tsx";
+import ErrorPage from "./shared/pages/ErrorPage.tsx";
+import ProtectedRoute from "./shared/components/guard/ProtectedRoute.tsx";
 
-export default function App() {
-    const location = useLocation();
-    const isPublicRoute = ["/", "/register", "/terms-and-conditions"].includes(location.pathname);
+const SignInPage = React.lazy(() => import('./auth/pages/SignInPage.tsx'));
+const SignUpPage = React.lazy(() => import('./auth/pages/SignUpPage.tsx'));
 
+const HomePage = React.lazy(() => import('./home/pages/HomePage.tsx'));
+
+function App() {
     return (
-        <AuthProvider>
-            <Routes>
-                <Route element={isPublicRoute ? null : <ProtectedRoute/>}>
-                    <Route path="/" element={<LoginPage/>}/>
-                    <Route path="/register" element={<RegisterPage/>}/>
-                    <Route path="/terms-and-conditions" element={<TermsAndConditionsPage pathName={''}/>}/>
+        <React.StrictMode>
+            <Suspense fallback={<SuspenseFallback/>}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<SignInPage/>}/>
+                        <Route path="/register" element={<SignUpPage/>}/>
+                        <Route path="/errors/:type" element={<ErrorPage/>}/>
 
-                    <Route element={<ProtectedRoute/>}>
-                        <Route path="/home" element={<HomePage/>}/>
-                    </Route>
-                </Route>
-            </Routes>
-        </AuthProvider>
-    );
+                        <Route element={<ProtectedRoute/>}>
+                            <Route path="/home" element={<HomePage/>}/>
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+            </Suspense>
+        </React.StrictMode>
+    )
 }
+
+export default App
