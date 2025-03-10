@@ -1,6 +1,6 @@
 # 📚 Virtual Library
 
-Una aplicación web moderna para gestionar y organizar tu biblioteca personal de libros. ¡Nunca fue tan fácil mantener un registro de tus lecturas!
+Una aplicación web moderna para gestionar y organizar tu biblioteca virtual. ¡Nunca fue tan fácil mantener un registro de tus lecturas!
 
 ## 🚀 Requisitos previos
 
