@@ -4,20 +4,17 @@ version = "0.1.0"
 description = "A virtual library"
 readme = "README.md"
 packages = [{include = "app"}]
-requires-python = ">=3.9"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
-fastapi = "~0.115.8"
+python = "^3.9"
+fastapi = "~0.115.11"
 pydantic = "~2.10.6"
-PyJWT = "~2.10.1"
 passlib = "~1.7.4"
 bcrypt = "4.0.1"
 sqlmodel = "~0.0.22"
-SQLAlchemy = "~2.0.38"
-starlette = "~0.45.3"
 uvicorn = "^0.34.0"
-psycopg2 = "^2.9.10"
+psycopg2-binary = "^2.9.10"
