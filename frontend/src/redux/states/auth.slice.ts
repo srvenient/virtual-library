@@ -55,6 +55,21 @@ export const login = createAsyncThunk<
     }
 )
 
+export const logout = createAsyncThunk<
+    void,
+    void,
+    { rejectValue: Record<string, any> }
+>(
+    "auth/logout",
+    async (_, {rejectWithValue}) => {
+        try {
+            await apiClient.post("/auth/logout");
+        } catch (error: any) {
+            return handleError(error, rejectWithValue);
+        }
+    }
+)
+
 export const fetchUser = createAsyncThunk<
     User,
     void,
@@ -80,13 +95,7 @@ export const fetchUser = createAsyncThunk<
 export const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
-    reducers: {
-        logout: (state) => {
-            state.user = null;
-            state.authenticated = false;
-            Cookie.remove("token");
-        }
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(login.pending, (state) => {
@@ -96,6 +105,15 @@ export const authSlice = createSlice({
                 state.authenticated = true;
             })
             .addCase(login.rejected, (state) => {
+                state.authenticated = false;
+            });
+        builder
+            .addCase(logout.fulfilled, (state) => {
+                state.user = null;
+                state.authenticated = false;
+            })
+            .addCase(logout.rejected, (state) => {
+                state.user = null;
                 state.authenticated = false;
             });
         builder
@@ -110,6 +128,5 @@ export const authSlice = createSlice({
     }
 });
 
-export const {logout} = authSlice.actions;
 
 export default authSlice.reducer;
