@@ -1,13 +1,13 @@
 from datetime import timedelta
-from http.client import responses
-from typing import Annotated
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
+from starlette.responses import JSONResponse
 
 from app.api.auth.models.token_models import Token
-from app.api.deps import SessionDep, CurrentStudent
+from app.api.deps import SessionDep, CurrentStudent, get_token_from_cookie
 from app.api.student.repository import student_crud
 from app.core import security
 from app.core.config import settings
@@ -50,6 +50,20 @@ def login_access_token(
     )
 
     return Token(access_token=access_token)
+
+
+@router.post("/auth/logout")
+def logout(token: Annotated[str, Depends(get_token_from_cookie)]) -> Response:
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No active session"
+        )
+
+    response = JSONResponse(content={"message": "Logged out successfully"})
+    response.delete_cookie("access_token")
+    return response
+
 
 @router.get("/auth/me")
 def verify_token(student: CurrentStudent):
