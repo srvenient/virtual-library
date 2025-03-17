@@ -27,7 +27,7 @@ poetry install
 
 #### Frontend (React con npm)
 ```bash
-cd client
+cd frontend
 npm install
 ```
 
@@ -43,7 +43,7 @@ Esto iniciará el servidor de FastAPI en http://127.0.0.1:8000/.
 
 ### 2️⃣ Iniciar el frontend
 ```bash
-cd client
+cd frontend
 npm run dev # Esto es por si estas en un entorno de desarrollo
 ```
 Esto ejecutará la aplicación en modo desarrollo. Abre http://localhost:5174 en tu navegador.
