@@ -9,11 +9,16 @@
 
     --color-theme-teal-deep: #028484;
     --color-theme-deep-sky-blue: #1973b8;
+    --color-theme-deep-sky-blue-light: #42A0EC;
     --color-theme-ocean-blue: #497b9c;
     --color-theme-soft-blue: #7ab0c7;
     --color-theme-aqua-sky: #a3d4e0;
     --color-theme-light-blue: #d6f0f3;
     --color-theme-lightest-blue: #f0f9fa;
+
+    --color-theme-blue: #5b9bd5;
+    --color-theme-blue-light: #2a6fb0;
+    --color-theme-blue-dark: #2c91e6;
 
     --font-family-special: "Coronita", Arial, Helvetica, sans-serif;
     --font-family-error: "Verdana", sans-serif;
