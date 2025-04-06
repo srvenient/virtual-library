@@ -26,7 +26,7 @@ export default function SignUpPage() {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await handleRegister(data);
+            await handleRegister({...data, email: data.email.toLocaleLowerCase()});
             reset();
         } catch (error: any) {
             console.error(error);

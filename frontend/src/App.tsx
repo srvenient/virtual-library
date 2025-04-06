@@ -2,13 +2,13 @@ import React, {Suspense} from 'react';
 import './App.css'
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import SuspenseFallback from "./shared/components/feedback/SuspenseFallback.tsx";
-import ErrorPage from "./shared/pages/ErrorPage.tsx";
 import ProtectedRoute from "./shared/components/guard/ProtectedRoute.tsx";
 
 const SignInPage = React.lazy(() => import('./auth/pages/SignInPage.tsx'));
 const SignUpPage = React.lazy(() => import('./auth/pages/SignUpPage.tsx'));
 
 const HomePage = React.lazy(() => import('./home/pages/HomePage.tsx'));
+const BooksPage = React.lazy(() => import('./book/pages/BooksPage.tsx'));
 
 function App() {
     return (
@@ -18,10 +18,10 @@ function App() {
                     <Routes>
                         <Route path="/" element={<SignInPage/>}/>
                         <Route path="/register" element={<SignUpPage/>}/>
-                        <Route path="/errors/:type" element={<ErrorPage/>}/>
 
                         <Route element={<ProtectedRoute/>}>
                             <Route path="/home" element={<HomePage/>}/>
+                            <Route path="/books" element={<BooksPage/>}/>
                         </Route>
                     </Routes>
                 </BrowserRouter>
