@@ -1,5 +1,5 @@
 # Usa la versión más reciente estable de Python
-FROM python:3.12.2
+FROM python:3.13.2
 
 ENV PYTHONUNBUFFERED=1
 
