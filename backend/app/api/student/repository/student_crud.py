@@ -17,7 +17,7 @@ def create_student(*, session: Session, student_create: StudentCreate) -> Studen
 
 
 def get_student_by_email(*, session: Session, email: str) -> Student | None:
-    statement = select(Student).where(Student.email == email)
+    statement = select(Student).where(Student.email == email.lower())
     session_student = session.exec(statement).first()
     return session_student
 
