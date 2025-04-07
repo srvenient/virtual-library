@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from sqlalchemy import func
 from sqlmodel import Session, select
 from app.api.book.models.book_models import Book, BookCreate, BookPublic, BooksPublic
 
@@ -11,9 +12,14 @@ def create_book(session: Session, book_data: BookCreate) -> BookPublic:
     return BookPublic(**book.dict())
 
 
-def get_all_books(session: Session) -> BooksPublic:
-    books = session.exec(select(Book)).all()
-    return BooksPublic(data=[BookPublic(**b.dict()) for b in books], count=len(books))
+def get_all_books(session: Session, page: int = 1, limit: int = 10) -> BooksPublic:
+    offset = (page - 1) * limit
+    total = session.exec(select(func.count()).select_from(Book)).one()
+    books = session.exec(select(Book).offset(offset).limit(limit)).all()
+    return BooksPublic(
+        data=[BookPublic(**b.dict()) for b in books],
+        count=total
+    )
 
 
 def get_book_by_title(session: Session, title: str) -> BookPublic:
