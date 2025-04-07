@@ -19,7 +19,7 @@ function Hero() {
             </div>
             <div className="grid grid-cols-2 grid-rows-3 gap-5.5 mt-8">
                 <Link
-                    to={"/library"}
+                    to={"/books"}
                       className="bg-white shadow-md p-4 h-auto hover:scale-105 transition-all duration-300 ease-in-out"
                 >
                     <div className="flex flex-row justify-start ">

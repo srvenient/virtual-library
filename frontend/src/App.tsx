@@ -21,7 +21,7 @@ function App() {
 
                         <Route element={<ProtectedRoute/>}>
                             <Route path="/home" element={<HomePage/>}/>
-                            <Route path="/book" element={<BookPage/>}/>
+                            <Route path="/books" element={<BookPage/>}/>
                         </Route>
                     </Routes>
                 </BrowserRouter>
