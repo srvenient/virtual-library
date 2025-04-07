@@ -1,4 +1,4 @@
-import {useAppSelector} from "../../../redux/hooks/useReduxHooks.ts";
+﻿import {useAppSelector} from "../../../redux/hooks/useReduxHooks.ts";
 import {Link} from "react-router-dom";
 import bookIcon from "../../../assets/images/book-study-svgrepo-com.svg";
 import computerIcon
@@ -29,10 +29,15 @@ function Hero() {
                             className="w-20 h-20 mb-2"
                         />
                         <div className="flex flex-col justify-start gap-y-2 ml-3">
-                            <h2 className="text-base font-medium">Libros</h2>
-                            <p className="text-base text-theme-gray-medium leading-5">
-                                Encuentra libros, artículos y documentos para tu formación.
-                            </p>
+                            <div className="gap-y-0.5">
+                                <h2 className="text-base font-medium">Libros</h2>
+                                <p className="text-base text-theme-gray-medium leading-5">
+                                    Encuentra libros, artículos y documentos para tu formación.
+                                </p>
+                            </div>
+                            <label className="text-sm bg-green-200 text-green-800 font-medium px-2 py-1 rounded-full w-fit">
+                                Activo
+                            </label>
                         </div>
                     </div>
                 </Link>
@@ -47,10 +52,15 @@ function Hero() {
                             className="w-20 h-20 mb-2"
                         />
                         <div className="flex flex-col justify-start gap-y-2 ml-3">
-                            <h2 className="text-base font-medium">Computadores</h2>
-                            <p className="text-base text-theme-gray-medium leading-5">
-                                Encuentra libros, artículos y documentos para tu formación.
-                            </p>
+                            <div className="gap-y-0.5">
+                                <h2 className="text-base font-medium">Computadores</h2>
+                                <p className="text-base text-theme-gray-medium leading-5">
+                                    Encuentra libros, artículos y documentos para tu formación.
+                                </p>
+                            </div>
+                            <label className="text-sm bg-red-200 text-red-800 font-medium px-2 py-1 rounded-full w-fit">
+                                Desactivado
+                            </label>
                         </div>
                     </div>
                 </Link>
@@ -64,10 +74,15 @@ function Hero() {
                             className="w-20 h-20 mb-2"
                         />
                         <div className="flex flex-col justify-start gap-y-2 ml-3">
-                            <h2 className="text-base font-medium">Salas</h2>
-                            <p className="text-base text-theme-gray-medium leading-5">
-                                Encuentra libros, artículos y documentos para tu formación.
-                            </p>
+                            <div className="gap-y-0.5">
+                                <h2 className="text-base font-medium">Salas</h2>
+                                <p className="text-base text-theme-gray-medium leading-5">
+                                    Encuentra libros, artículos y documentos para tu formación.
+                                </p>
+                            </div>
+                            <label className="text-sm bg-red-200 text-red-800 font-medium px-2 py-1 rounded-full w-fit">
+                                Desactivado
+                            </label>
                         </div>
                     </div>
                 </Link>

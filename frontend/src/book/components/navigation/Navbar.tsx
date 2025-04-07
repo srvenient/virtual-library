@@ -9,7 +9,7 @@ type NavItem = {
 const items: NavItem[] = [
     {
         label: "Libros",
-        to: "/library"
+        to: "/books"
     },
     {
         label: "Computadores",
@@ -61,7 +61,7 @@ function Navbar() {
                         >
                             <Link
                                 to={item.to}
-                                className="flex items-center justify-center hover:opacity-75 transition-all duration-300 ease-in-out relative"
+                                className="flex items-center justify-center hover:opacity-75 transition-all duration-300 ease-in-out relative h-16 translate-y-0.5"
                             >
                                 <span className="text-[15px] font-medium">{item.label}</span>
                                 {location.pathname === item.to && (

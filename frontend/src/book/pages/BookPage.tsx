@@ -5,6 +5,7 @@ import {fetchBooks} from "../../redux/states/book.slice.ts";
 import {RootState} from "../../redux/store.ts";
 import BookCard from "../components/ui/BookCard.tsx";
 import NavbarTest from "../components/navigation/Navbar.tsx";
+import Pagination from "../components/ui/Pagination.tsx";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -19,18 +20,10 @@ export default function BookPage() {
         dispatch(fetchBooks({page: currentPage, limit: ITEMS_PER_PAGE}));
     }, [dispatch, currentPage]);
 
-    const nextPage = () => {
-        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-    };
-
-    const prevPage = () => {
-        if (currentPage > 1) setCurrentPage(currentPage - 1);
-    };
-
     return (
         <div className="min-h-screen">
             <NavbarTest/>
-            <div className="py-6 px-2 max-w-screen-xl mx-auto mt-10 rounded-4xl">
+            <div className="py-2 px-2 max-w-screen-xl mx-auto mt-7 rounded-4xl">
                 <div
                     className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 min-h-[800px]">
                     {loading
@@ -51,53 +44,11 @@ export default function BookPage() {
                         ))
                     }
                 </div>
-                <div className="text-black flex justify-center gap-4 mt-6 items-center">
-                    {
-                        currentPage > 1 && (
-                            <button
-                                onClick={prevPage}
-                                className="font-medium text-base"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="size-8"
-                                >
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-4.28 9.22a.75.75 0 0 0 0 1.06l3 3a.75.75 0 1 0 1.06-1.06l-1.72-1.72h5.69a.75.75 0 0 0 0-1.5h-5.69l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3Z"
-                                        clip-rule="evenodd"
-                                    />
-                                </svg>
-                            </button>
-                        )
-                    }
-                    <span className=" font-medium px-1 py-2 whitespace-nowrap">
-                        Página {currentPage} de {totalPages}
-                    </span>
-                    {
-                        currentPage < totalPages && (
-                            <button
-                                onClick={nextPage}
-                                className="font-medium text-base"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="size-8"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </button>
-                        )
-                    }
-                </div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
     );
