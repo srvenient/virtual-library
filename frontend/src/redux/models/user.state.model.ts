@@ -1,6 +1,6 @@
 import {User} from "../../auth/models/user.model.ts";
 
-export interface State {
+export interface UserState {
     user: User | null;
     authenticated: boolean;
 }

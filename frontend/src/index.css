@@ -1,35 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-    --color-primary: #072146;
-    --color-primary-light: #1a3e6b;
-    --color-secondary: #003399;
+    --font-primary: "BentonSans", sans-serif;
 
-    --color-button-primary: #1973b8;
-
+    --color-theme-navy: #072146;
+    --color-theme-medium-blue: #1973b8;
+    --color-theme-royal-blue: #1464a5;
     --color-theme-teal-deep: #028484;
-    --color-theme-deep-sky-blue: #1973b8;
-    --color-theme-deep-sky-blue-light: #42A0EC;
-    --color-theme-ocean-blue: #497b9c;
-    --color-theme-soft-blue: #7ab0c7;
-    --color-theme-aqua-sky: #a3d4e0;
-    --color-theme-light-blue: #d6f0f3;
-    --color-theme-lightest-blue: #f0f9fa;
 
-    --color-theme-blue: #5b9bd5;
-    --color-theme-blue-light: #2a6fb0;
-    --color-theme-blue-dark: #2c91e6;
-
-    --font-family-special: "Coronita", Arial, Helvetica, sans-serif;
-    --font-family-error: "Verdana", sans-serif;
-}
-
-@font-face {
-    font-family: "helvetica neue";
-    src: url("/fonts/coronita.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+    --color-theme-gray-darkest: #121212;
+    --color-theme-gray-medium: #626262;
+    --color-theme-gray-lightest: #f4f4f4;
 }
 
 @font-face {
@@ -40,11 +21,20 @@
     font-display: swap;
 }
 
-@layer base {
-  input::-ms-reveal,
-  input::-ms-clear {
-    display: none;
-  }
+@font-face {
+    font-family: "BentonSans";
+    src: url("/fonts/BentonSansBBVA-Medium-Lite.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "BentonSans";
+    src: url("/fonts/BentonSansBBVA-Bold-Lite.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
 }
 
 body {

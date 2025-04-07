@@ -1,11 +1,11 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import apiClient from "../../shared/services/apiClient.ts";
 import qs from "qs";
-import {State} from "../models/state.model.ts";
+import {UserState} from "../models/user.state.model.ts";
 import Cookie from "js-cookie";
 import {User} from "../../auth/models/user.model.ts";
 
-const initialState: State = {
+const initialState: UserState = {
     user: null,
     authenticated: false
 }
@@ -40,7 +40,7 @@ export const login = createAsyncThunk<
             await apiClient.post(
                 "/login/access-token",
                 qs.stringify({
-                    username: data.email,
+                    username: data.email.toLocaleLowerCase(),
                     password: data.password
                 }),
                 {
@@ -127,6 +127,5 @@ export const authSlice = createSlice({
             });
     }
 });
-
 
 export default authSlice.reducer;

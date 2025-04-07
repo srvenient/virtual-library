@@ -2,10 +2,11 @@ import FeatureNavbar from "../../shared/components/navigation/FeatureNavbar.tsx"
 import Input from "../components/inputs/Input.tsx";
 import {Controller, FormProvider, useForm} from "react-hook-form";
 import {Link, useNavigate} from "react-router-dom";
-import Button from "../components/buttons/Button.tsx";
+import Button from "../../shared/components/button/Button.tsx";
 import useRegister from "../hooks/useRegister.ts";
 import PasswordInput from "../components/inputs/PasswordInput.tsx";
 import EmailInput from "../components/inputs/EmailInput.tsx";
+import errorIcon from "../../assets/images/error.svg";
 
 export default function SignUpPage() {
     const methods = useForm({
@@ -39,27 +40,18 @@ export default function SignUpPage() {
         >
             <FeatureNavbar
                 label="Registro de Usuario"
-                buttonIconColor="#fff"
-                buttonBackground="var(--color-theme-teal-deep)"
                 buttonAction={() => navigate('/')}
             />
             <div
                 className="flex flex-col justify-center items-center mt-16"
             >
                 {
-                    error && <label className="flex flex-col items-center text-red-600 text-center text-xl mb-4">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="size-6 mb-2"
-                        >
-                            <path
-                                fillRule="evenodd"
-                                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-                                clipRule="evenodd"
-                            />
-                        </svg>
+                    error && <label className="flex flex-col items-center text-red-600 text-center text-lg leading-6 mb-4">
+                        <img
+                            src={errorIcon}
+                            alt="Error"
+                            className="size-6 mb-1"
+                        />
                         No se pudo realizar el registro.<br/>
                         Ya existe un usuario con el correo ingresado.
                     </label>

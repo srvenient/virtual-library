@@ -3,7 +3,7 @@ import logo from "../../../assets/images/logo-unimonserrate.png";
 
 export default function SuspenseFallback() {
     return (
-        <div className="bg-primary flex items-center justify-center h-screen">
+        <div className="bg-theme-navy flex items-center justify-center h-screen">
             <motion.img
                 src={logo}
                 alt="logo"

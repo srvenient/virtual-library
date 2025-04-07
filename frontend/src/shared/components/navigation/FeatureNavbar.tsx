@@ -10,7 +10,7 @@ type NavbarProps = {
 export default function FeatureNavbar({label, buttonBackground, buttonIconColor, buttonAction}: NavbarProps) {
     return (
         <div
-            className="bg-primary text-white py-2 relative"
+            className="bg-theme-navy text-white py-2 relative"
         >
             <div
                 className="flex items-center justify-between mx-auto max-w-5xl"
@@ -27,14 +27,12 @@ export default function FeatureNavbar({label, buttonBackground, buttonIconColor,
                 </a>
             </div>
             {
-                buttonBackground && buttonIconColor && buttonAction && (
+                buttonAction && (
                     <button
                         onClick={buttonAction}
-                        className="absolute inset-y-0 right-0 opacity-30  px-5 h-full hover:opacity-100"
-                        style={{
-                            color: buttonIconColor || "#fff",
-                            background: buttonBackground || "var(--color-theme-ocean-blue)"
-                        }}
+                        className={`absolute inset-y-0 right-0 px-5 h-full hover:brightness-110 transition-all duration-300 ease-in-out
+                                 ${buttonIconColor ? `text-[${buttonIconColor}]` : "text-white"}
+                                 ${buttonBackground ? `bg-[${buttonBackground}]` : "bg-theme-teal-deep"}`}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
