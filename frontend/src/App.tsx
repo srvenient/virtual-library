@@ -9,6 +9,7 @@ const SignUpPage = React.lazy(() => import('./auth/pages/SignUpPage.tsx'));
 
 const HomePage = React.lazy(() => import('./home/pages/HomePage.tsx'));
 const BookPage = React.lazy(() => import('./book/pages/BookPage.tsx'));
+const RoomPage = React.lazy(() => import('./room/pages/RoomPage.tsx'));
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                         <Route element={<ProtectedRoute/>}>
                             <Route path="/home" element={<HomePage/>}/>
                             <Route path="/books" element={<BookPage/>}/>
+                            <Route path="/rooms" element={<RoomPage/>}/>
                         </Route>
                     </Routes>
                 </BrowserRouter>
