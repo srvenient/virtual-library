@@ -8,6 +8,7 @@ class ComputerBase(SQLModel):
     assigned_career: Optional[str] = Field(default=None, max_length=255)
     is_available: bool = Field(default=True)
     location: str | None = Field(default=None, max_length=255)  # Ubicación física del computador
+    cover_url: str | None = Field(default=None, max_length=512)
 
 
 class ComputerCreate(ComputerBase):
