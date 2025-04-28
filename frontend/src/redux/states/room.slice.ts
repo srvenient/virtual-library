@@ -1,0 +1,54 @@
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import apiClient from "../../shared/services/apiClient.ts";
+import {RoomState} from "../models/room.state.model.ts";
+import {Room} from "../../room/models/room.model.ts";
+
+export const initialState: RoomState = {
+  rooms: [],
+  count: 0,
+  loading: false,
+  error: null
+}
+
+export const fetchRooms = createAsyncThunk<
+  { data: Room[], count: number },
+  { page: number, limit: number },
+  { rejectValue: string }
+>(
+  "rooms/fetchRooms",
+  async ({page, limit}, {rejectWithValue}) => {
+    try {
+      const [response] = await Promise.all([apiClient.get<{ data: Room[], count: number }>(
+        `/rooms?page=${page}&limit=${limit}`
+      )]);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const roomsSlice = createSlice({
+  name: "rooms",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // fetchRooms
+      .addCase(fetchRooms.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRooms.fulfilled, (state, action: PayloadAction<{ data: Room[], count: number }>) => {
+        state.loading = false;
+        state.rooms = action.payload.data;
+        state.count = action.payload.count;
+      })
+      .addCase(fetchRooms.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to fetch rooms";
+      });
+  }
+})
+
+export default roomsSlice.reducer;

@@ -63,8 +63,8 @@ export default function HomePage() {
                     Encuentra libros, artículos y documentos para tu formación.
                   </p>
                 </div>
-                <label className="text-sm bg-red-200 text-red-800 font-medium px-2 py-1 rounded-full w-fit">
-                  Desactivado
+                <label className="text-sm bg-green-200 text-green-800 font-medium px-2 py-1 rounded-full w-fit">
+                  Activo
                 </label>
               </div>
             </div>
@@ -85,8 +85,8 @@ export default function HomePage() {
                     Encuentra libros, artículos y documentos para tu formación.
                   </p>
                 </div>
-                <label className="text-sm bg-red-200 text-red-800 font-medium px-2 py-1 rounded-full w-fit">
-                  Desactivado
+                <label className="text-sm bg-green-200 text-green-800 font-medium px-2 py-1 rounded-full w-fit">
+                  Activo
                 </label>
               </div>
             </div>

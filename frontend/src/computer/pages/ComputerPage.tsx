@@ -1,23 +1,23 @@
-import {RootState} from "../../redux/store.ts";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks/useReduxHooks.ts";
 import {useEffect, useState} from "react";
-import RoomCard from "../components/ui/RoomCard.tsx";
-import GeneralNavbar from "../../shared/components/navigation/GeneralNavbar.tsx";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks/useReduxHooks.ts";
+import {RootState} from "../../redux/store.ts";
+import ComputerCard from "../components/ui/ComputerCard.tsx";
 import Pagination from "../../shared/components/ui/navigation/Pagination.tsx";
-import {Room} from "../models/room.model.ts";
-import {fetchRooms} from "../../redux/states/room.slice.ts";
+import {fetchComputers} from "../../redux/states/computer.slice.ts";
+import {Computer} from "../models/computer.model.ts";
+import GeneralNavbar from "../../shared/components/navigation/GeneralNavbar.tsx";
 
 const ITEMS_PER_PAGE = 10;
 
-export default function RoomPage() {
+export default function ComputerPage() {
   const dispatch = useAppDispatch();
-  const {rooms, error, count, loading} = useAppSelector((state: RootState) => state.rooms);
+  const {computers, error, count, loading} = useAppSelector((state: RootState) => state.computers);
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
 
   useEffect(() => {
-    dispatch(fetchRooms({page: currentPage, limit: ITEMS_PER_PAGE}));
+    dispatch(fetchComputers({page: currentPage, limit: ITEMS_PER_PAGE}));
   }, [dispatch, currentPage]);
 
   return (
@@ -41,8 +41,8 @@ export default function RoomPage() {
               )
             ) : error ? (
               <p>{error}</p>
-            ) : rooms.map((room: Room) => (
-              <RoomCard key={room.room_number} room={room}/>
+            ) : computers.map((computer: Computer) => (
+              <ComputerCard key={computer.serial_number} computer={computer}/>
             ))}
         </div>
         <Pagination
