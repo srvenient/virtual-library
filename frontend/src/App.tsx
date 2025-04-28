@@ -10,26 +10,28 @@ const SignUpPage = React.lazy(() => import('./auth/pages/SignUpPage.tsx'));
 const HomePage = React.lazy(() => import('./home/pages/HomePage.tsx'));
 const BookPage = React.lazy(() => import('./book/pages/BookPage.tsx'));
 const RoomPage = React.lazy(() => import('./room/pages/RoomPage.tsx'));
+const ComputerPage = React.lazy(() => import('./computer/pages/ComputerPage.tsx'));
 
 function App() {
-    return (
-        <React.StrictMode>
-            <Suspense fallback={<SuspenseFallback/>}>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<SignInPage/>}/>
-                        <Route path="/register" element={<SignUpPage/>}/>
+  return (
+    <React.StrictMode>
+      <Suspense fallback={<SuspenseFallback/>}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<SignInPage/>}/>
+            <Route path="/register" element={<SignUpPage/>}/>
 
-                        <Route element={<ProtectedRoute/>}>
-                            <Route path="/home" element={<HomePage/>}/>
-                            <Route path="/books" element={<BookPage/>}/>
-                            <Route path="/rooms" element={<RoomPage/>}/>
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
-            </Suspense>
-        </React.StrictMode>
-    )
+            <Route element={<ProtectedRoute/>}>
+              <Route path="/home" element={<HomePage/>}/>
+              <Route path="/books" element={<BookPage/>}/>
+              <Route path="/rooms" element={<RoomPage/>}/>
+              <Route path="/computers" element={<ComputerPage/>}/>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Suspense>
+    </React.StrictMode>
+  )
 }
 
 export default App
