@@ -17,7 +17,7 @@ export default function ComputerCard({computer}: { computer: Computer }) {
           </h1>
           <p className="text-sm text-theme-gray-medium">marca {computer.brand}</p>
           {computer.brand && (
-            <p className="text-sm text-theme-gray-medium">carrera {computer.brand}</p>
+            <p className="text-sm text-theme-gray-medium">carrera {computer.assigned_career}</p>
           )}
           <p className="text-sm text-theme-gray-medium">sede {computer.campus}</p>
         </div>

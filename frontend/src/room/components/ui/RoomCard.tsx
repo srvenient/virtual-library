@@ -13,7 +13,7 @@ export default function RoomCard({room}: { room: Room }) {
             <div className="flex flex-col justify-between flex-1 px-4 py-3">
                 <div>
                     <h1 className="text-lg font-medium text-theme-gray-darkest line-clamp-1">
-                        {room.campus}
+                        {room.room_number}
                     </h1>
                     {room.is_available ? (
                         <span className="text-sm text-green-400 font-medium">
@@ -24,6 +24,7 @@ export default function RoomCard({room}: { room: Room }) {
                             No disponible
                         </span>
                     )}
+                <p className="text-sm text-theme-gray-medium">carrera: {room.campus}</p>
                 </div>
                 <button className="bg-theme-royal-blue rounded-lg w-fit p-2 pl-3 pr-3 mt-4 text-left hover:bg-theme-blue-light transition duration-200 hover:brightness-110">
                     <span className="text-[15px] text-white font-medium cursor-pointer">Reservar</span>
