@@ -10,7 +10,6 @@ export const initialState: BookState = {
   error: null
 }
 
-
 export const fetchBooks = createAsyncThunk<
   { data: Book[], count: number },
   { page: number, limit: number },
@@ -28,7 +27,6 @@ export const fetchBooks = createAsyncThunk<
     }
   }
 );
-
 
 export const booksSlice = createSlice({
   name: "books",
