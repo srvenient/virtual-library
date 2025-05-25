@@ -88,7 +88,7 @@ export default function GeneralNavbar() {
 
       <button
         onClick={() => navigate("/home")}
-        className="bg-theme-medium-blue absolute inset-y-0 right-0 px-5 h-20 hover:brightness-110"
+        className="bg-theme-medium-blue absolute inset-y-0 right-0 px-5 h-20 hover:brightness-110 cursor-pointer"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

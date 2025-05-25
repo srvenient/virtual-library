@@ -30,9 +30,12 @@ export default function FeatureNavbar({label, buttonBackground, buttonIconColor,
         buttonAction && (
           <button
             onClick={buttonAction}
-            className={`absolute inset-y-0 right-0 px-5 h-full hover:brightness-110 transition-all duration-300 ease-in-out
-                       ${buttonIconColor ? `text-[${buttonIconColor}]` : "text-white"}
-                       ${buttonBackground ? `bg-[${buttonBackground}]` : "bg-theme-teal-deep"}`}
+            className={
+              `absolute inset-y-0 right-0 px-5 h-full hover:brightness-110 transition-all duration-300 ease-in-out
+              ${buttonIconColor ? `text-[${buttonIconColor}]` : "text-white"}
+              ${buttonBackground ? `bg-[${buttonBackground}]` : "bg-theme-teal-deep"}
+              cursor-pointer`
+            }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
