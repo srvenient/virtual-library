@@ -4,4 +4,5 @@ export interface Book {
   author: string;
   campus_name: string;
   cover_url: string;
+  is_available: boolean;
 }

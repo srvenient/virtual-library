@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks/useReduxHooks.ts";
 import {fetchBooks} from "../../redux/states/book.slice.ts";
 import {RootState} from "../../redux/store.ts";
-import BookCard from "../components/ui/BookCard.tsx";
+import BookCard from "../components/ui/card/BookCard.tsx";
 import GeneralNavbar from "../../shared/components/navigation/GeneralNavbar.tsx";
 import Pagination from "../../shared/components/ui/navigation/Pagination.tsx";
 

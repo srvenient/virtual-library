@@ -27,22 +27,19 @@ export default function SignInPage() {
       <FeatureNavbar
         label="Acceso de Usuario"
       />
-      {
-        error && <label className="flex flex-col items-center text-red-600 text-center text-lg mb-4 mt-10">
+      {error && <label className="flex flex-col items-center text-red-600 text-center text-lg mb-4 mt-10">
           <img
-            src={errorIcon}
-            alt="Error"
-            className="size-6 mb-2"
+              src={errorIcon}
+              alt="Error"
+              className="size-6 mb-2"
           />
           <p className="leading-5.5">
-            Correo o contraseña incorrectos.<br/>
-            <span>
-                          Si no tienes cuenta, <Link to='/register' className="text-sky-600 underline">regístrate
-                          aquí</Link>
-                        </span>
+              Correo o contraseña incorrectos.<br/>
+              <span>
+                      Si no tienes cuenta, <Link to='/register' className="text-sky-600 underline">regístrateaquí</Link>
+                  </span>
           </p>
-        </label>
-      }
+      </label>}
       <div
         className={`flex justify-center items-center ${error ? "mt-8" : "mt-16"}`}
       >
