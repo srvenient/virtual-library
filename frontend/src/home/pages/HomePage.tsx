@@ -13,7 +13,7 @@ export default function HomePage() {
 
   return (
     <div
-      className="bg-theme-gray-lightest min-h-screen"
+      className="bg-white min-h-screen"
     >
       <Navbar/>
       <div className="flex flex-col justify-center items-center max-w-[var(--breakpoint-lg)] px-11 mx-auto mt-16">
