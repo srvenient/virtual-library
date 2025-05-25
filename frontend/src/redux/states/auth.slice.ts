@@ -81,7 +81,8 @@ export const fetchUser = createAsyncThunk<
       const {data} = await apiClient.get("/auth/me");
       return {
         fullName: data.full_name,
-        email: data.email
+        email: data.email,
+        id: data.id
       };
     } catch (error: any) {
       if (error.response?.status === 401) {
