@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks/useReduxHooks.ts";
 import {RootState} from "../../redux/store.ts";
-import ComputerCard from "../components/ui/ComputerCard.tsx";
+import ComputerCard from "../components/ui/card/ComputerCard.tsx";
 import Pagination from "../../shared/components/ui/navigation/Pagination.tsx";
 import {fetchComputers} from "../../redux/states/computer.slice.ts";
 import {Computer} from "../models/computer.model.ts";
@@ -25,7 +25,8 @@ export default function ComputerPage() {
       <GeneralNavbar/>
       <div className="py-2 px-2 max-w-screen-xl mx-auto mt-7 rounded-4xl">
         <div
-          className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 min-h-[800px]">
+          className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 h-auto"
+        >
           {loading ?
             [...Array(ITEMS_PER_PAGE)].map((_, i) => (
                 <div
