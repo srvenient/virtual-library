@@ -9,6 +9,7 @@ class BookBase(SQLModel):
     publication_date: date =  None
     campus_name: str = Field(default=None, max_length=255)
     cover_url: str = Field(default=None, max_length=512)
+    is_available: bool = Field(default=True)
 
 
 class BookCreate(BookBase):
