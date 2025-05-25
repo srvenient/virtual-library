@@ -6,7 +6,7 @@ from datetime import date
 class BookBase(SQLModel):
     title: str = Field(max_length=255)
     author: str = Field(max_length=255)
-    publication_date: date =  None
+    publication_date: date = None
     campus_name: str = Field(default=None, max_length=255)
     cover_url: str = Field(default=None, max_length=512)
     is_available: bool = Field(default=True)
