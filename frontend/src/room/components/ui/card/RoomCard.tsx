@@ -31,10 +31,12 @@ export default function RoomCard({currentPage, room}: { currentPage: number, roo
   const {
     register,
     handleSubmit,
-    formState: {errors},
-    reset
+    formState: {errors, isValid},
+    reset,
+    watch
   } = useForm<Input>({
     defaultValues: DefaultValues,
+    mode: "onChange"
   });
   const {is_available} = room;
 
@@ -49,7 +51,6 @@ export default function RoomCard({currentPage, room}: { currentPage: number, roo
       ...data,
       resource_id: room.id,
     }
-    console.log(fullData);
     setFormData(fullData);
     setShowFinalConfirmation(true);
   });
@@ -147,6 +148,13 @@ export default function RoomCard({currentPage, room}: { currentPage: number, roo
         onSubmit={onSubmit}
         register={register}
         errors={errors}
+        formValues={{
+          start_date: watch("start_date"),
+          start_time: watch("start_time"),
+          return_date: watch("return_date"),
+          return_time: watch("return_time")
+        }}
+        isValid={isValid}
       />
       <ConfirmReservationModal
         show={showFinalConfirmation}
