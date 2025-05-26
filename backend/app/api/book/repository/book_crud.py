@@ -15,7 +15,9 @@ def create_book(session: Session, book_data: BookCreate) -> BookPublic:
 def get_all_books(session: Session, page: int = 1, limit: int = 10) -> BooksPublic:
     offset = (page - 1) * limit
     total = session.exec(select(func.count()).select_from(Book)).one()
-    books = session.exec(select(Book).offset(offset).limit(limit)).all()
+    books = session.exec(
+        select(Book).order_by(Book.id).offset(offset).limit(limit)
+    ).all()
     return BooksPublic(
         data=[BookPublic(**b.dict()) for b in books],
         count=total

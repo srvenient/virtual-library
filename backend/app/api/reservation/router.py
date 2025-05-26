@@ -33,6 +33,19 @@ def create_reservation(
     if hasattr(resource, "is_available") and not resource.is_available:
         raise HTTPException(status_code=400, detail="Resource not available")
 
+    existing_reservation = session.exec(
+        select(Reservation).where(
+            Reservation.student_id == current_student.id,
+            Reservation.resource_type == data.resource_type
+        )
+    ).first()
+
+    if existing_reservation:
+        raise HTTPException(
+            status_code=400,
+            detail=f"You already have a reservation for a {data.resource_type}"
+        )
+
     reservation = Reservation(
         **data.model_dump(),
         student_id=current_student.id

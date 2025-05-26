@@ -7,6 +7,7 @@ class RoomBase(SQLModel):
     is_available: bool = Field(default=True)
     campus: str | None = Field(default=None, max_length=255)
     cover_url: str | None = Field(default=None, max_length=512)
+    description: str | None = Field(default=None)
 
 
 class RoomCreate(RoomBase):
