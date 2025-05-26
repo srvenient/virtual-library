@@ -5,9 +5,25 @@ type BookReservationModalProps = {
   onSubmit: (data: any) => void;
   register: any;
   errors: any;
+  formValues: {
+    start_date: string;
+    start_time: string;
+    return_date: string;
+    return_time: string;
+  }
+  isValid: boolean;
 }
 
-const BookReservationModal = ({recurseId, show, onClose, onSubmit, register, errors}: BookReservationModalProps) => {
+const BookReservationModal = ({recurseId, show, onClose, onSubmit, register, errors, formValues, isValid}: BookReservationModalProps) => {
+  const today = new Date().toISOString().split("T")[0];
+
+  const getDateTime = (date: string, time: string) => {
+    if (!date || !time) return null;
+    return new Date(`${date}T${time}`);
+  };
+
+  const now = new Date();
+
   if (!show) return null;
 
   return (
@@ -44,10 +60,7 @@ const BookReservationModal = ({recurseId, show, onClose, onSubmit, register, err
                   </p>
                   <form
                     id="reservationForm"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      onSubmit(e);
-                    }}
+                    onSubmit={onSubmit}
                     className="mt-4 space-y-4"
                   >
                     <div className="text-left">
@@ -57,8 +70,10 @@ const BookReservationModal = ({recurseId, show, onClose, onSubmit, register, err
                       <input
                         type="date"
                         id="start_date"
-                        {...register("start_date", {required: "La fecha de reserva es obligatoria"})}
-                        min={new Date().toISOString().split("T")[0]}
+                        {...register("start_date", {
+                          required: "La fecha de reserva es obligatoria"
+                        })}
+                        min={today}
                         className="mt-1 block w-full border-gray-300 shadow-sm sm:text-sm py-1 px-2 outline-none"
                       />
                       {errors.start_date && (
@@ -73,14 +88,25 @@ const BookReservationModal = ({recurseId, show, onClose, onSubmit, register, err
                       <input
                         type="time"
                         id="start_time"
+                        disabled={!formValues.start_date}
                         {...register("start_time", {
                           required: "La hora de inicio es obligatoria",
                           validate: (value: string) => {
+                            console.log("Validating start_time:", value);
                             const [hour] = value.split(":").map(Number);
-                            return hour >= 6 && hour <= 22 || "La hora debe estar entre las 6:00 AM y 10:00 PM";
+                            if (hour < 6 || hour > 22) {
+                              return "La hora debe estar entre las 6:00 AM y 10:00 PM";
+                            }
+
+                            const startDateTime = getDateTime(formValues.start_date, value);
+                            if (formValues.start_date === today && startDateTime && startDateTime < now) {
+                              return "La hora de inicio no puede ser menor a la hora actual";
+                            }
+
+                            return true;
                           }
                         })}
-                        className="mt-1 block w-full border-gray-300 shadow-sm sm:text-sm py-1 px-2 outline-none"
+                        className="mt-1 block w-full border-gray-300 shadow-sm sm:text-sm py-1 px-2 outline-none disabled:cursor-not-allowed disabled:bg-gray-100"
                       />
                       {errors.start_time && (
                         <p className="text-red-700 text-sm mt-1">{errors.start_time.message}</p>
@@ -94,19 +120,19 @@ const BookReservationModal = ({recurseId, show, onClose, onSubmit, register, err
                       <input
                         type="date"
                         id="return_date"
+                        disabled={!formValues.start_date || !formValues.start_time}
                         {...register("return_date", {
                           required: "La fecha de entrega es obligatoria",
-                          validate: (value: string, formValues: any) => {
-                            // Debe ser >= reservation_date, si quieres validar en frontend
-                            const reservationDate = (formValues as any).start_date;
-                            if (reservationDate && value < reservationDate) {
+                          validate: (value: string) => {
+                            const start = formValues.start_date;
+                            if (start && value < start) {
                               return "La fecha de entrega no puede ser anterior a la fecha de reserva";
                             }
                             return true;
                           }
                         })}
-                        min={new Date().toISOString().split("T")[0]}
-                        className="mt-1 block w-full border-gray-300 shadow-sm sm:text-sm py-1 px-2 outline-none"
+                        min={today}
+                        className="mt-1 block w-full border-gray-300 shadow-sm sm:text-sm py-1 px-2 outline-none disabled:cursor-not-allowed disabled:bg-gray-100"
                       />
                       {errors.return_date && (
                         <p className="text-red-700 text-sm mt-1">{errors.return_date.message}</p>
@@ -120,14 +146,35 @@ const BookReservationModal = ({recurseId, show, onClose, onSubmit, register, err
                       <input
                         type="time"
                         id="return_time"
+                        disabled={!formValues.start_date || !formValues.start_time || !formValues.return_date}
                         {...register("return_time", {
                           required: "La hora de entrega es obligatoria",
                           validate: (value: string) => {
                             const [hour] = value.split(":").map(Number);
-                            return hour >= 6 && hour <= 22 || "La hora debe estar entre las 6:00 AM y 10:00 PM";
+                            if (hour < 6 || hour > 22) {
+                              return "La hora debe estar entre las 6:00 AM y 10:00 PM";
+                            }
+
+                            const returnDateTime = getDateTime(formValues.return_date, value);
+                            const startDateTime = getDateTime(formValues.start_date, formValues.start_time);
+
+                            if (formValues.return_date === today && returnDateTime && returnDateTime < now) {
+                              return "La hora de entrega no puede ser menor a la hora actual";
+                            }
+
+                            if (
+                              formValues.return_date === formValues.start_date &&
+                              returnDateTime &&
+                              startDateTime &&
+                              returnDateTime < startDateTime
+                            ) {
+                              return "La hora de entrega no puede ser menor a la hora de reserva";
+                            }
+
+                            return true;
                           }
                         })}
-                        className="mt-1 block w-full border-gray-300 shadow-sm sm:text-sm py-1 px-2 outline-none"
+                        className="mt-1 block w-full border-gray-300 shadow-sm sm:text-sm py-1 px-2 outline-none disabled:cursor-not-allowed disabled:bg-gray-100"
                       />
                       {errors.return_time && (
                         <p className="text-red-700 text-sm mt-1">{errors.return_time.message}</p>
@@ -144,7 +191,8 @@ const BookReservationModal = ({recurseId, show, onClose, onSubmit, register, err
               <button
                 form="reservationForm"
                 type="submit"
-                className="inline-flex w-1/2 justify-center bg-theme-royal-blue px-3 py-2 text-sm font-semibold text-white shadow-xs hover:brightness-110 cursor-pointer"
+                disabled={!isValid}
+                className={`inline-flex w-1/2 justify-center bg-theme-royal-blue px-3 py-2 text-sm font-semibold text-white shadow-xs hover:brightness-110 ${isValid ? "cursor-pointer" : "cursor-not-allowed"}`}
               >
                 Reservar
               </button>
