@@ -29,10 +29,12 @@ export default function ComputerCard({currentPage, computer}: { currentPage: num
   const {
     register,
     handleSubmit,
-    formState: {errors},
-    reset
+    formState: {errors, isValid},
+    reset,
+    watch
   } = useForm({
     defaultValues: DefaultValues,
+    mode: "onChange"
   });
   const {is_available} = computer;
 
@@ -129,6 +131,13 @@ export default function ComputerCard({currentPage, computer}: { currentPage: num
         onSubmit={onSubmit}
         register={register}
         errors={errors}
+        formValues={{
+          start_date: watch("start_date"),
+          start_time: watch("start_time"),
+          return_date: watch("return_date"),
+          return_time: watch("return_time")
+        }}
+        isValid={isValid}
       />
       <ConfirmReservationModal
         show={showFinalConfirmation}
