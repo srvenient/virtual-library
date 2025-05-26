@@ -3,29 +3,28 @@ import {useState} from "react";
 import {useForm} from "react-hook-form";
 import ConfirmReservationModal from "../../../../shared/components/ui/modal/ConfirmReservationModal.tsx";
 import BookReservationModal from "../modal/BookReservationModal.tsx";
-import {useAppSelector} from "../../../../redux/hooks/useReduxHooks.ts";
 import {Book} from "../../../models/book.model.ts";
+import {useAppDispatch} from "../../../../redux/hooks/useReduxHooks.ts";
+import {fetchBooks, reserveBook} from "../../../../redux/states/book.slice.ts";
 
 type Input = {
-  reservation_date: string;
+  resource_id: number;
+  start_date: string;
   start_time: string;
-  due_date: string;
-  end_time: string;
-  user_id?: number;
-  resource_type?: string;
-  resource_id?: number;
+  return_date: string;
+  return_time: string;
 };
 
-export default function BookCard({book}: { book: Book }) {
+export default function BookCard({currentPage, book}: { currentPage: number, book: Book }) {
   const DefaultValues: Input = {
-    reservation_date: "",
+    resource_id: -1,
+    start_date: "",
     start_time: "",
-    due_date: "",
-    end_time: "",
-    user_id: undefined,
-    resource_type: undefined,
-    resource_id: undefined,
+    return_date: "",
+    return_time: "",
   };
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -37,8 +36,6 @@ export default function BookCard({book}: { book: Book }) {
   });
   const {is_available} = book;
 
-  const user = useAppSelector((state) => state.auth.user);
-
   const [showError, setShowError] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showFinalConfirmation, setShowFinalConfirmation] = useState(false);
@@ -47,18 +44,21 @@ export default function BookCard({book}: { book: Book }) {
   const onSubmit = handleSubmit((data: Input) => {
     const fullData = {
       ...data,
-      user_id: user.id,
-      resource_type: 'book',
       resource_id: book.id,
     }
     setFormData(fullData);
     setShowFinalConfirmation(true);
   });
 
-  const confirmReservation = () => {
-    console.log("Reserva confirmada con datos:", formData);
-    setShowFinalConfirmation(false);
-    closeModals();
+  const handleReservationSubmit = async () => {
+    try {
+      setShowFinalConfirmation(false);
+      await dispatch(reserveBook(formData)).unwrap();
+      await dispatch(fetchBooks({page: currentPage, limit: 10}));
+      handleCloseModal();
+    } catch (error: any) {
+      console.error("Error reservando libros:", error);
+    }
   };
 
   const handleReservation = () => {
@@ -69,7 +69,7 @@ export default function BookCard({book}: { book: Book }) {
     }
   };
 
-  const closeModals = () => {
+  const handleCloseModal = () => {
     setShowConfirmation(false);
     setShowError(false);
     reset();
@@ -111,31 +111,30 @@ export default function BookCard({book}: { book: Book }) {
           <div className="absolute bottom-0 flex items-center justify-between w-full px-4 py-3 bg-white">
             <button
               onClick={handleReservation}
-              className="bg-theme-navy text-white text-sm w-1/2 px-4 py-2 hover:bg-blue-900 transition-colors duration-300 cursor-pointer"
+              className={`bg-theme-navy text-white text-sm px-4 py-2 hover:bg-blue-900 transition-colors duration-300 cursor-pointer ${!book.is_available ? "w-auto" : "w-1/2"}`}
             >
-              Reservar
+              {book.is_available ? "Reservar" : "No disponible"}
             </button>
           </div>
         </div>
       </div>
 
       <BookReservationModal
-        userId={user.id}
         recurseId={book.id}
         show={showConfirmation}
-        onClose={closeModals}
+        onClose={handleCloseModal}
         onSubmit={onSubmit}
         register={register}
         errors={errors}
       />
       <ConfirmReservationModal
         show={showFinalConfirmation}
-        onConfirm={confirmReservation}
+        onConfirm={handleReservationSubmit}
         onCancel={() => setShowFinalConfirmation(false)}
       />
       <BookingErrorModal
         isOpen={showError}
-        onClose={closeModals}
+        onClose={handleCloseModal}
       >
         Este libro no está disponible para la reserva en este momento.
         Por favor, intente con otro o verifica más tarde.

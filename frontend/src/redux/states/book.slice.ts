@@ -28,6 +28,43 @@ export const fetchBooks = createAsyncThunk<
   }
 );
 
+export interface ReservationPayload {
+  resource_id: number;
+  start_date: string;
+  start_time: string;
+  return_date: string;
+  return_time: string;
+}
+
+export const reserveBook = createAsyncThunk<
+  { message: string },
+  ReservationPayload,
+  { rejectValue: string }
+>(
+  "books/reserveBook",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.post<{ message: string }>(
+        `/reservation/`,
+        {
+          resource_type: "book",
+          ...payload
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.detail || "Failed to reserve book";
+
+      if (errorMessage.toLowerCase().includes("reservation")) {
+        return rejectWithValue("Ya tienes una reserva activa para este recurso.");
+      } else {
+        return rejectWithValue(errorMessage);
+      }
+    }
+  }
+);
+
 export const booksSlice = createSlice({
   name: "books",
   initialState,
@@ -47,6 +84,20 @@ export const booksSlice = createSlice({
       .addCase(fetchBooks.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to fetch books";
+      });
+    builder
+      // reserveBook
+      .addCase(reserveBook.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(reserveBook.fulfilled, (state) => {
+        state.loading = false;
+        // Optionally handle successful reservation here
+      })
+      .addCase(reserveBook.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to reserve book";
       });
   }
 })

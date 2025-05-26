@@ -5,28 +5,28 @@ import {useForm} from "react-hook-form";
 import BookingErrorModal from "../../../../shared/components/ui/modal/BookingErrorModal.tsx";
 import Input from "../../../../auth/components/inputs/Input.tsx";
 import ConfirmReservationModal from "../../../../shared/components/ui/modal/ConfirmReservationModal.tsx";
-import {useAppSelector} from "../../../../redux/hooks/useReduxHooks.ts";
+import {useAppDispatch} from "../../../../redux/hooks/useReduxHooks.ts";
+import {fetchRooms, reserveRoom} from "../../../../redux/states/room.slice.ts";
+import DetailsModal from "../modal/DetailsModal.tsx";
 
 type Input = {
-  reservation_date: string;
+  resource_id: number;
+  start_date: string;
   start_time: string;
-  due_date: string;
-  end_time: string;
-  user_id?: number;
-  resource_type?: string;
-  resource_id?: number;
+  return_date: string;
+  return_time: string;
 };
 
-export default function RoomCard({room}: { room: Room }) {
+export default function RoomCard({currentPage, room}: { currentPage: number, room: Room }) {
   const DefaultValues: Input = {
-    reservation_date: "",
+    resource_id: -1, // Placeholder for resource_id
+    start_date: "",
     start_time: "",
-    due_date: "",
-    end_time: "",
-    user_id: undefined,
-    resource_type: undefined,
-    resource_id: undefined,
+    return_date: "",
+    return_time: "",
   };
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -38,8 +38,7 @@ export default function RoomCard({room}: { room: Room }) {
   });
   const {is_available} = room;
 
-  const user = useAppSelector((state) => state.auth.user);
-
+  const [detailsVisible, setDetailsVisible] = useState(false);
   const [showError, setShowError] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showFinalConfirmation, setShowFinalConfirmation] = useState(false);
@@ -48,18 +47,22 @@ export default function RoomCard({room}: { room: Room }) {
   const onSubmit = handleSubmit((data: Input) => {
     const fullData = {
       ...data,
-      user_id: user.id,
-      resource_type: 'room',
-      resource_id: room.room_number,
+      resource_id: room.id,
     }
+    console.log(fullData);
     setFormData(fullData);
     setShowFinalConfirmation(true);
   });
 
-  const confirmReservation = () => {
-    console.log("Reserva confirmada con datos:", formData);
-    setShowFinalConfirmation(false);
-    closeModals();
+  const handleReservationSubmit = async () => {
+    try {
+      setShowFinalConfirmation(false);
+      await dispatch(reserveRoom(formData)).unwrap();
+      await dispatch(fetchRooms({ page: currentPage, limit: 10 }));
+      handleCloseModal();
+    } catch (error) {
+      console.error("Error reservando sala:", error);
+    }
   };
 
   const handleReservation = () => {
@@ -70,7 +73,7 @@ export default function RoomCard({room}: { room: Room }) {
     }
   };
 
-  const closeModals = () => {
+  const handleCloseModal = () => {
     setShowConfirmation(false);
     setShowError(false);
     reset();
@@ -97,39 +100,62 @@ export default function RoomCard({room}: { room: Room }) {
           <h3 className="text-lg font-semibold text-gray-800 px-4 pt-2">
             Código: {room.room_number}
           </h3>
-          <p className="text-gray-600 px-4 pb-2">
+          <p className="flex flex-col text-gray-600 px-4 pb-2">
             {room.campus && (
               <span className="text-sm text-gray-500">
-              Sede: {room.campus}
-            </span>
+                Sede: {room.campus}
+              </span>
             )}
           </p>
+          <button
+            onClick={() => setDetailsVisible(true)}
+            className={`text-blue-600 underline text-sm px-4 hover:text-blue-900 transition-colors duration-300 cursor-pointer`}
+          >
+            Ver detalles
+          </button>
           <div className="absolute bottom-0 flex items-center justify-between w-full px-4 py-3 bg-white">
             <button
               onClick={handleReservation}
-              className="bg-theme-navy text-white text-sm w-1/2 px-4 py-2 hover:bg-blue-900 transition-colors duration-300 cursor-pointer"
+              className={`bg-theme-navy text-white text-sm px-4 py-2 hover:bg-blue-900 transition-colors duration-300 cursor-pointer ${!room.is_available ? "w-auto" : "w-1/2"}`}
             >
-              Reservar
+              {room.is_available ? "Reservar" : "No disponible"}
             </button>
           </div>
         </div>
       </div>
 
+      <DetailsModal
+        isOpen={detailsVisible}
+        onClose={() => setDetailsVisible(false)}
+      >
+        {room.description ? (
+          <div className="p-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Detalles de la Sala</h3>
+            <p className="text-gray-600">{room.description}</p>
+          </div>
+        ) : (
+          <div className="p-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Detalles de la Sala</h3>
+            <p className="text-gray-600">No hay descripción disponible.</p>
+          </div>
+        )}
+      </DetailsModal>
       <RoomReservationModal
+        recurseId={room.id}
         show={showConfirmation}
-        onClose={closeModals}
+        onClose={handleCloseModal}
         onSubmit={onSubmit}
         register={register}
         errors={errors}
       />
       <ConfirmReservationModal
         show={showFinalConfirmation}
-        onConfirm={confirmReservation}
+        onConfirm={handleReservationSubmit}
         onCancel={() => setShowFinalConfirmation(false)}
       />
       <BookingErrorModal
         isOpen={showError}
-        onClose={closeModals}
+        onClose={handleCloseModal}
       >
         Esta sala no está disponible para reservar en este momento.
         Por favor, elige otra sala o verifica más tarde.

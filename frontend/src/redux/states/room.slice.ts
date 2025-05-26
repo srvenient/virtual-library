@@ -28,6 +28,43 @@ export const fetchRooms = createAsyncThunk<
   }
 );
 
+export interface ReservationPayload {
+  resource_id: number;
+  start_date: string;
+  start_time: string;
+  return_date: string;
+  return_time: string;
+}
+
+export const reserveRoom = createAsyncThunk<
+  { message: string },
+  ReservationPayload,
+  { rejectValue: string }
+>(
+  "rooms/reserveRoom",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.post<{ message: string }>(
+        `/reservation/`,
+        {
+          resource_type: "room",
+          ...payload
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.detail || "Failed to reserve room";
+
+      if (errorMessage.toLowerCase().includes("reservation")) {
+        return rejectWithValue("Ya tienes una reserva activa para este recurso.");
+      } else {
+        return rejectWithValue(errorMessage);
+      }
+    }
+  }
+);
+
 export const roomsSlice = createSlice({
   name: "rooms",
   initialState,
@@ -47,6 +84,20 @@ export const roomsSlice = createSlice({
       .addCase(fetchRooms.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to fetch rooms";
+      });
+    builder
+      // reserveRoom
+      .addCase(reserveRoom.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(reserveRoom.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(reserveRoom.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to reserve room";
       });
   }
 })

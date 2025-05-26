@@ -28,6 +28,44 @@ export const fetchComputers = createAsyncThunk<
   }
 );
 
+export interface ReservationPayload {
+  resource_id: number;
+  start_date: string;
+  start_time: string;
+  return_date: string;
+  return_time: string;
+}
+
+export const reserveComputer = createAsyncThunk<
+  { message: string },
+  ReservationPayload,
+  { rejectValue: string }
+>(
+  "computers/reserveComputer",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.post<{ message: string }>(
+        `/reservation/`,
+        {
+          resource_type: "computer",
+          ...payload
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.detail || "Failed to reserve computer";
+      console.error("Error reserving computer:", errorMessage);
+
+      if (errorMessage.toLowerCase().includes("reservation")) {
+        return rejectWithValue("Ya tienes una reserva activa para este recurso.");
+      } else {
+        return rejectWithValue(errorMessage);
+      }
+    }
+  }
+);
+
 export const computersSlice = createSlice({
   name: "computers",
   initialState,
@@ -47,6 +85,20 @@ export const computersSlice = createSlice({
       .addCase(fetchComputers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to fetch computers";
+      });
+    builder
+      // reserveComputer
+      .addCase(reserveComputer.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(reserveComputer.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(reserveComputer.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to reserve computer";
       });
   }
 })

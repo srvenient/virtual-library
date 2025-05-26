@@ -5,19 +5,19 @@ import {computersSlice} from "./states/computer.slice.ts";
 import {roomsSlice} from "./states/room.slice.ts";
 
 export interface AppStore {
-    auth: any;
-    books: any;
-    computers: any;
-    rooms: any
+  auth: any;
+  books: any;
+  computers: any;
+  rooms: any
 }
 
 export const store = configureStore<AppStore>({
-    reducer: {
-        auth: authSlice.reducer,
-        books: booksSlice.reducer,
-        computers: computersSlice.reducer,
-        rooms: roomsSlice.reducer,
-    }
+  reducer: {
+    auth: authSlice.reducer,
+    books: booksSlice.reducer,
+    computers: computersSlice.reducer,
+    rooms: roomsSlice.reducer,
+  }
 });
 
 export type RootState = ReturnType<typeof store.getState>;

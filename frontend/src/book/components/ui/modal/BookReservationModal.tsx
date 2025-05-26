@@ -1,5 +1,4 @@
 type BookReservationModalProps = {
-  userId: number;
   recurseId?: number;
   show: boolean;
   onClose: () => void;
@@ -8,7 +7,7 @@ type BookReservationModalProps = {
   errors: any;
 }
 
-const BookReservationModal = ({userId, recurseId, show, onClose, onSubmit, register, errors}: BookReservationModalProps) => {
+const BookReservationModal = ({recurseId, show, onClose, onSubmit, register, errors}: BookReservationModalProps) => {
   if (!show) return null;
 
   return (
@@ -52,18 +51,18 @@ const BookReservationModal = ({userId, recurseId, show, onClose, onSubmit, regis
                     className="mt-4 space-y-4"
                   >
                     <div className="text-left">
-                      <label htmlFor="reservation_date" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="start_date" className="block text-sm font-medium text-gray-700">
                         Fecha de la reserva
                       </label>
                       <input
                         type="date"
-                        id="reservation_date"
-                        {...register("reservation_date", {required: "La fecha de reserva es obligatoria"})}
+                        id="start_date"
+                        {...register("start_date", {required: "La fecha de reserva es obligatoria"})}
                         min={new Date().toISOString().split("T")[0]}
                         className="mt-1 block w-full border-gray-300 shadow-sm sm:text-sm py-1 px-2 outline-none"
                       />
-                      {errors.reservation_date && (
-                        <p className="text-red-700 text-sm mt-1">{errors.reservation_date.message}</p>
+                      {errors.start_date && (
+                        <p className="text-red-700 text-sm mt-1">{errors.start_date.message}</p>
                       )}
                     </div>
 
@@ -89,17 +88,17 @@ const BookReservationModal = ({userId, recurseId, show, onClose, onSubmit, regis
                     </div>
 
                     <div className="text-left">
-                      <label htmlFor="due_date" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="return_date" className="block text-sm font-medium text-gray-700">
                         Fecha de entrega
                       </label>
                       <input
                         type="date"
-                        id="due_date"
-                        {...register("due_date", {
+                        id="return_date"
+                        {...register("return_date", {
                           required: "La fecha de entrega es obligatoria",
                           validate: (value: string, formValues: any) => {
                             // Debe ser >= reservation_date, si quieres validar en frontend
-                            const reservationDate = (formValues as any).reservation_date;
+                            const reservationDate = (formValues as any).start_date;
                             if (reservationDate && value < reservationDate) {
                               return "La fecha de entrega no puede ser anterior a la fecha de reserva";
                             }
@@ -109,19 +108,19 @@ const BookReservationModal = ({userId, recurseId, show, onClose, onSubmit, regis
                         min={new Date().toISOString().split("T")[0]}
                         className="mt-1 block w-full border-gray-300 shadow-sm sm:text-sm py-1 px-2 outline-none"
                       />
-                      {errors.due_date && (
-                        <p className="text-red-700 text-sm mt-1">{errors.due_date.message}</p>
+                      {errors.return_date && (
+                        <p className="text-red-700 text-sm mt-1">{errors.return_date.message}</p>
                       )}
                     </div>
 
                     <div className="text-left">
-                      <label htmlFor="end_time" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="return_time" className="block text-sm font-medium text-gray-700">
                         Hora de entrega
                       </label>
                       <input
                         type="time"
-                        id="end_time"
-                        {...register("end_time", {
+                        id="return_time"
+                        {...register("return_time", {
                           required: "La hora de entrega es obligatoria",
                           validate: (value: string) => {
                             const [hour] = value.split(":").map(Number);
@@ -130,12 +129,11 @@ const BookReservationModal = ({userId, recurseId, show, onClose, onSubmit, regis
                         })}
                         className="mt-1 block w-full border-gray-300 shadow-sm sm:text-sm py-1 px-2 outline-none"
                       />
-                      {errors.end_time && (
-                        <p className="text-red-700 text-sm mt-1">{errors.end_time.message}</p>
+                      {errors.return_time && (
+                        <p className="text-red-700 text-sm mt-1">{errors.return_time.message}</p>
                       )}
                     </div>
 
-                    <input type="hidden" {...register("user_id")} value={userId}/>
                     <input type="hidden" {...register("resource_type")} value="book"/>
                     <input type="hidden" {...register("resource_id")} value={recurseId}/>
                   </form>
